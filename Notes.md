@@ -80,3 +80,43 @@ const Reviews = async ({ productId }) => {
 | Third-party libs needing the DOM           | Charts, animations, modals            |
 
 ---
+# Note 2: <Link> & <Image> component
+## <Link> Component
+Remember React Router's `<Link>`? Next.js has its own built-in version that works similarly but with **superpowers**.
+
+#### Key Differences from React Router:
+| **Feature**        | **React Router** `<Link>` | **Next.js** `<Link>`                      |
+|----------------|------------------------|----------------------------------------|
+| **Prefetching**    | ❌ No                  | ✅ Yes (loads page data in background) |
+| **Server-Side**    | ❌ Client-only         | ✅ Works with SSR                      |
+| **Import From**    | `react-router-dom`     | `next/link`                            |
+
+#### Where would I actually use this?
+**Scenario**: You're building a _Netflix clone_. The homepage shows 50 movie cards.
+
+**Without Next.js** `<Link>`: When the user clicks "Movie #1", the browser sends a request to the server, waits, then loads the page. _Feels slow_.
+
+**With Next.js** `<Link>`: When the user just _hovers_ over "Movie #1", Next.js secretly loads that movie's data in the background. When they click, the page appears _instantly_.
+
+## <Image> Component
+**Regular HTML** `<img>` tags are like using a **flip phone in 2025**—they work, but they're slow and wasteful.
+
+**Next.js's** `<Image>` is like a **smartphone**—it automatically optimizes, resizes, and lazy-loads images for you.
+
+#### What It Does Automatically:
+- **Resizes images** to fit the screen (no loading a 4K image on a phone)
+- **Lazy loads** (only loads images when you scroll near them)
+- **Converts to modern formats** like WebP (smaller file sizes)
+- **Prevents layout shift** (no page jumping when images load)
+
+#### Where would I actually use this?
+**Scenario**: You're building an _Instagram clone_ with a feed of user posts.
+- **Without** `<Image>`: You load 20 high-res photos at once. The page takes 10 seconds to load, users get frustrated and leave.
+- **With** `<Image>`: Only the first 3 visible photos load. As the user scrolls, the rest load one by one. The page loads in 1 second.
+
+#### Real Impact:
+- Your logo.png might be 500KB as a raw file
+- Next.js <Image> automatically converts it to WebP and shrinks it to 20KB
+- 25x smaller file = 25x faster load time
+
+---

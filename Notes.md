@@ -120,3 +120,36 @@ Remember React Router's `<Link>`? Next.js has its own built-in version that work
 - 25x smaller file = 25x faster load time
 
 ---
+# Note-3: [Mongodb connection]
+## TS
+`typeof mongoose`
+- typeof extracts the TypeScript type of the mongoose object (the entire library).
+
+`Promise<typeof mongoose>`
+- A Promise that resolves to the Mongoose library instance.
+
+! (Non-null assertion operator)
+- Tells TypeScript: "I know this might be undefined, but trust me, it's not."
+
+## MERN to Next.js Bridge
+In Express (MERN):
+You'd typically put this in a db.js file:
+```js
+// db.js
+const mongoose = require('mongoose');
+mongoose.connect(process.env.MONGODB_URI);
+```
+- Then import it once in your `server.js`. 
+- Since in Vite the server is up 24*7 and in Nextjs code runs on-demand and 
+- **Hot reload** = When you save a file during development, Next.js automatically refreshes your browser and restarts parts of the server without you manually stopping/restarting the app.
+- **The Problem**: Every time the server restarts, MongoDB would try to create a new connection → After 10-20 saves, you'd hit MongoDB's connection limit (usually 100-500) → App crashes with "Too many connections" error. That's why we cache the connection in global.mongoose.
+
+**In Next.js:**
+- **No single entry point**: Next.js runs code on-demand (per API route/page).
+- **Solution**: Use global caching (like this file) to ensure one connection across all routes.
+
+## Key Takeaway
+This pattern is a singleton (only one instance exists). Every time you call connectDB(), you get the same MongoDB connection, preventing resource exhaustion during development **hot reloads**.Then import it once in your server.js.
+
+---
+
